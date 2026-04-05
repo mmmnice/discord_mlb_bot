@@ -1,4 +1,4 @@
 discord.py==1.7.3
-aiohttp==3.9.5
+aiohttp==3.7.4
 certifi
 python-dotenv
