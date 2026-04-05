@@ -3,7 +3,9 @@ import aiohttp
 import asyncio
 import os
 from dotenv import load_dotenv
-from datetime import date
+from datetime import datetime
+import pytz
+
 
 import ssl
 import certifi
@@ -27,7 +29,8 @@ airout = None
 groundout = None
 
 async def get_todays_game_pks():
-    today = date.today().strftime("%Y-%m-%d")
+    est = pytz.timezone("America/New_York")
+    today = datetime.now(est).strftime("%Y-%m-%d")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}&teamId=147"
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
         async with session.get(url) as r:
@@ -75,7 +78,7 @@ async def monitor():
     while not client.is_closed():
         try:
             game_pks = await get_todays_game_pks()
-            print(f"[{date.today()}] calling the api... " + str(game_pks))
+            print(f"[{datetime.today()}] calling the api... " + str(game_pks))
             for pk in game_pks:
                 strikeouts = await get_judge_strikeouts(pk)
                 outs = await outty(pk)
