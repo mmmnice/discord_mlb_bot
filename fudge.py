@@ -118,6 +118,6 @@ async def monitor():
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
-    client.loop.create_task(monitor())
+    asyncio.ensure_future(monitor())
 
 client.run(DISCORD_TOKEN)
