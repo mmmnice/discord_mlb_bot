@@ -75,14 +75,15 @@ async def monitor():
     global groundout
     await client.wait_until_ready()
     channel = client.get_channel(CHANNEL_ID)
+    await channel.send("test")
     while not client.is_closed():
         try:
             game_pks = await get_todays_game_pks()
-            print(f"[{datetime.today()}] calling the api... " + str(game_pks))
+            print(f"[{datetime.today()}] calling the api... Game id:" + str(game_pks))
             for pk in game_pks:
                 strikeouts = await get_judge_strikeouts(pk)
                 outs = await outty(pk)
-                print(outs)
+                print("Players Stats: " + "pop: "+str(outs[0]) + " ground: " + str(outs[1]) + " strikeouts: " + str(strikeouts))
                 if strikeouts is None:
                     continue
                 if known_strikeout_count is None:
@@ -91,8 +92,8 @@ async def monitor():
                     new_ks = strikeouts - known_strikeout_count
                     for _ in range(new_ks):
                         await channel.send(
-                            "⚾ **Aaron FUDGE JUST STRUCK OUT!** 🙈 "
-                            f"That's strikeout #{strikeouts} today for Aaron Judge!"
+                            "⚾ **Aaron FUDGE JUST STRUCK OUT!** 🙈💩 "
+                            f"That's strikeout #{strikeouts} today for Aaron Fudge!"
                         )
                     known_strikeout_count = strikeouts
                 if airout is None:
@@ -100,7 +101,7 @@ async def monitor():
                 elif outs[0] > airout:
                     await channel.send(
                             "⚾ **Aaron FUDGE JUST pop OUT!** 🙈 "
-                            f"That's popout #{outs[0]} today for Aaron Judge!"
+                            f"That's popout #{outs[0]} today for Aaron Fudge!"
                         )
                     airout = outs[0]
 
@@ -108,8 +109,8 @@ async def monitor():
                     groundout = outs[1]
                 elif outs[1] > groundout:
                     await channel.send(
-                            "⚾ **Aaron FUDGE JUST ground OUT!** 🙈 "
-                            f"That's groundout #{outs[1]} today for Aaron Judge!"
+                            "⚾ **Aaron FUDGE JUST ground OUT!** 💩 "
+                            f"That's groundout #{outs[1]} today for Aaron Fudge!"
                         )
                     groundout = outs[1]
 
