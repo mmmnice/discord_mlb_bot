@@ -25,6 +25,7 @@ connector = aiohttp.TCPConnector(ssl=ssl_context)
 client = discord.Client(intents=intents, connector=connector)
 
 known_strikeout_count = None
+currentpk = None
 airout = None
 groundout = None
 
@@ -75,10 +76,18 @@ async def monitor():
     global groundout
     await client.wait_until_ready()
     channel = client.get_channel(CHANNEL_ID)
-    await channel.send("test")
     while not client.is_closed():
         try:
             game_pks = await get_todays_game_pks()
+            if current_pk is None:
+                current_pk = game_pks[0]
+            elif currrent_pk != game_pks[0]:
+                current_pk = game_pks[0]
+                known_strikeout_count = None
+                airout = None
+                groundout = None
+                print("reset count for new game")
+
             print(f"[{datetime.today()}] calling the api... Game id:" + str(game_pks))
             for pk in game_pks:
                 strikeouts = await get_judge_strikeouts(pk)
