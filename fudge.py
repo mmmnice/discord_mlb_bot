@@ -74,15 +74,16 @@ async def monitor():
     global known_strikeout_count
     global airout
     global groundout
+    global currentpk
     await client.wait_until_ready()
     channel = client.get_channel(CHANNEL_ID)
     while not client.is_closed():
         try:
             game_pks = await get_todays_game_pks()
-            if current_pk is None:
-                current_pk = game_pks[0]
-            elif currrent_pk != game_pks[0]:
-                current_pk = game_pks[0]
+            if currentpk is None:
+                currentpk = game_pks[0]
+            elif currentpk != game_pks[0]:
+                currentpk = game_pks[0]
                 known_strikeout_count = None
                 airout = None
                 groundout = None
